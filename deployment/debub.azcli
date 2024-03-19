@@ -1,0 +1,6 @@
+
+
+az group create -n simpleFrankTest -l eastus2
+
+## validate with Parameter file
+az deployment group validate -g simpleFrankTest  --template-file "deployment/azuredeploy.json" --parameters "deployment/azuredeploy.params.json"  --verbose 
