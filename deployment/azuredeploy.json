@@ -42,7 +42,7 @@
 	  },
 	  {
 		"type": "Microsoft.Insights/components",
-		"apiVersion": "2020-02-02",
+		"apiVersion": "2015-05-01",
 		"name": "[variables('applicationInsightsName')]",
 		"location": "[resourceGroup().location]",
 		"tags": {
