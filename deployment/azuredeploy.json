@@ -11,7 +11,6 @@
 	},
 	"variables": {
 	  "hostingPlanName": "[parameters('functionAppName')]",
-	  "applicationInsightsName": "[parameters('functionAppName')]",
 	  "storageAccountName": "[format('{0}azfunctions', uniqueString(resourceGroup().id))]"
 	},
 	"resources": [
@@ -41,15 +40,6 @@
 		}
 	  },
 	  {
-		"type": "Microsoft.Insights/components",
-		"apiVersion": "2015-05-01",
-		"name": "[variables('applicationInsightsName')]",
-		"location": "[resourceGroup().location]",
-		"properties": {
-		  "Application_Type": "web"
-		}
-	  },
-	  {
 		"type": "Microsoft.Web/sites",
 		"apiVersion": "2022-03-01",
 		"name": "[parameters('functionAppName')]",
@@ -61,10 +51,6 @@
 		  "siteConfig": {
 			"linuxFxVersion": "DOTNET-ISOLATED|8.0",
 			"appSettings": [
-			  {
-				"name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-				"value": "[reference(resourceId('Microsoft.Insights/components', parameters('functionAppName')), '2022-03-01').InstrumentationKey]"
-			  },
 			  {
 				"name": "AzureWebJobsStorage",
 				"value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2022-05-01').keys[0].value)]"
@@ -104,7 +90,6 @@
 			}
 		],
 		"dependsOn": [
-		  "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
 		  "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
 		  "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
 		]
